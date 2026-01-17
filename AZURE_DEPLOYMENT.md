@@ -12,6 +12,8 @@ This document summarizes the exact Azure deployment configuration used for the S
 
 **App name:** sis-backend-server
 
+**Default domain:** sis-backend-server-bfagcaducaa2ahcr.southindia-01.azurewebsites.net
+
 **GitHub Actions workflow:**
 
 - File: [.github/workflows/backend.yml](.github/workflows/backend.yml)
@@ -26,7 +28,7 @@ This document summarizes the exact Azure deployment configuration used for the S
 
 **Backend test URL:**
 
-- https://sis-backend-server.azurewebsites.net/api/v1/public/colleges
+- https://sis-backend-server-bfagcaducaa2ahcr.southindia-01.azurewebsites.net/api/v1/public/colleges
 
 ## Database (Azure MySQL Flexible Server)
 
@@ -59,7 +61,7 @@ This document summarizes the exact Azure deployment configuration used for the S
 
 **Environment variables (Static Web App → Configuration):**
 
-- VITE_API_BASE_URL = https://sis-backend-server.azurewebsites.net
+- VITE_API_BASE_URL = https://sis-backend-server-bfagcaducaa2ahcr.southindia-01.azurewebsites.net
 
 ## Cleanup After Demo
 
