@@ -26,7 +26,9 @@ target/
 # =========================
 # Sensitive Config Files
 # =========================
-src/main/resources/application.properties
+# Note: application.properties is safe to commit as it only contains
+# environment variable references, not actual secrets.
+# Secrets are stored in Azure App Service Configuration.
 
 ### STS ###
 .apt_generated
