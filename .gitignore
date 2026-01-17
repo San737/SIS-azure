@@ -1,0 +1,20 @@
+# Node
+node_modules/
+dist/
+dist-ssr/
+
+# Java
+**/target/
+
+# Env files
+.env
+.env.*
+
+# IDE
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
