@@ -1,0 +1,250 @@
+### Student Info System - API Testing
+### Base URL
+@baseUrl = http://localhost:8080/api/v1
+@contentType = application/json
+
+### Variables for tokens (will be set after login)
+@studentToken = eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6IlNUVURFTlQiLCJzdWIiOiJzYW5Acm5zaXQuYWMuaW4iLCJpYXQiOjE3NjM0MDYyMTgsImV4cCI6MTc2MzQ0MjIxOH0.oViFDJtl7mLOCAnXdxJszONs7rU_d6S4QRfwr0hNcuU
+@adminToken = eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6IkFETUlOIiwic3ViIjoicm5zYWRtaW5Acm5zaXQuYWMuaW4iLCJpYXQiOjE3NjM0MDQ2MTMsImV4cCI6MTc2MzQ0MDYxM30.ud3At34iGjev_AXvP3934yl-piz9gEOp38Usa57z5UY
+@superAdminToken = 
+################################################################################
+### 1. PUBLIC ENDPOINTS (No Authentication Required)
+################################################################################
+
+### Get all approved colleges (public endpoint)
+GET {{baseUrl}}/public/colleges
+Content-Type: {{contentType}}
+
+### Get all departments (public endpoint)
+GET {{baseUrl}}/public/departments
+Content-Type: {{contentType}}
+
+################################################################################
+### 2. AUTHENTICATION ENDPOINTS
+################################################################################
+
+### Login as Student
+# @name studentLogin
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "san@rnsit.ac.in",
+  "password": "student123"
+}
+
+### Login as College Admin
+# @name adminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "rnsadmin@rnsit.ac.in",
+  "password": "student123"
+}
+
+### Login as Super Admin
+# @name superAdminLogin
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "superadmin@sis.com",
+  "password": "student123"
+}
+
+################################################################################
+### 3. STUDENT REGISTRATION & OPERATIONS
+################################################################################
+
+### Register a new student
+POST {{baseUrl}}/student/register
+Content-Type: {{contentType}}
+
+{
+  "fullName": "John Doe",
+  "email": "john.doe@example.com",
+  "password": "student123",
+  "collegeId": 1,
+  "deptId": 1,
+  "phone": "1234567890",
+  "address": "123 Main St, City"
+}
+
+### Get student dashboard (requires student authentication)
+GET {{baseUrl}}/student/dashboard
+Content-Type: {{contentType}}
+Authorization: Bearer {{studentToken}}
+
+### Get student profile (requires student authentication)
+GET {{baseUrl}}/student/profile
+Content-Type: {{contentType}}
+Authorization: Bearer {{studentToken}}
+
+### Update student profile (requires student authentication)
+PUT {{baseUrl}}/student/profile
+Content-Type: {{contentType}}
+Authorization: Bearer {{studentToken}}
+
+{
+  "fullName": "John Doe Updated",
+  "phone": "9876543210",
+  "address": "456 New Address, City"
+}
+
+### Get all available courses for student (requires student authentication)
+GET {{baseUrl}}/student/courses
+Content-Type: {{contentType}}
+Authorization: Bearer {{studentToken}}
+
+### Enroll in a course (requires student authentication)
+POST {{baseUrl}}/student/enroll
+Content-Type: {{contentType}}
+Authorization: Bearer {{studentToken}}
+
+{
+  "courseId": 1
+}
+
+### Get student enrollment history (requires student authentication)
+GET {{baseUrl}}/student/enrollments
+Content-Type: {{contentType}}
+Authorization: Bearer {{studentToken}}
+
+################################################################################
+### 4. COLLEGE ADMIN REGISTRATION & OPERATIONS
+################################################################################
+
+### Register a new college admin
+POST {{baseUrl}}/college/register
+Content-Type: {{contentType}}
+
+{
+  "adminName": "Admin Name",
+  "email": "newadmin2@college.edu",
+  "password": "admin123",
+  "phone": "1234567890",
+  "collegeName": "New College",
+  "address": "College Address",
+  "city": "City Name",
+  "state": "State Name",
+  "website": "https://college.edu"
+}
+
+### Get college admin dashboard (requires admin authentication)
+GET {{baseUrl}}/college/dashboard
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+### Get all courses for college (requires admin authentication)
+GET {{baseUrl}}/college/courses
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+### Add a new course (requires admin authentication)
+POST {{baseUrl}}/college/addCourse
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+{
+  "courseName": "Introduction to blockchain",
+  "courseCode": "CS501",
+  "credits": 3,
+  "deptId": 1,
+  "description": "Basic programming concepts and fundamentals"
+}
+
+### Delete a course (requires admin authentication)
+DELETE {{baseUrl}}/college/deleteCourse/8
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+################################################################################
+### 5. SUPER ADMIN OPERATIONS
+################################################################################
+
+### Get super admin dashboard statistics (requires super admin authentication)
+GET {{baseUrl}}/superadmin/dashboard
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+### Get all colleges (requires super admin authentication)
+GET {{baseUrl}}/superadmin/colleges
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+### Get all college registration requests (requires super admin authentication)
+# Optional query parameter: ?status=PENDING or ?status=APPROVED or ?status=REJECTED
+GET {{baseUrl}}/superadmin/requests
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+### Get pending college requests only (requires super admin authentication)
+GET {{baseUrl}}/superadmin/requests?status=PENDING
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+### Approve a college registration request (requires super admin authentication)
+PUT {{baseUrl}}/superadmin/requests/1/approve
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+### Reject a college registration request (requires super admin authentication)
+PUT {{baseUrl}}/superadmin/requests/1/reject
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+### Delete a college (requires super admin authentication)
+DELETE {{baseUrl}}/superadmin/college/1
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+### Delete a college request (requires super admin authentication)
+DELETE {{baseUrl}}/superadmin/college-requests/1
+Content-Type: {{contentType}}
+Authorization: Bearer {{superAdminToken}}
+
+################################################################################
+### TESTING FLOW GUIDE
+################################################################################
+# 
+# 1. START WITH PUBLIC ENDPOINTS:
+#    - Test GET /public/colleges to see available colleges
+#
+# 2. SUPER ADMIN FLOW:
+#    - Login as super admin (update credentials as needed)
+#    - Copy the token from response and paste it in @superAdminToken variable
+#    - Get dashboard stats
+#    - View all college requests
+#    - Approve/reject college requests
+#    - View all colleges
+#    - Delete colleges if needed
+#
+# 3. COLLEGE ADMIN FLOW:
+#    - Register a new college admin
+#    - Wait for super admin approval (or approve via super admin endpoints)
+#    - Login as college admin
+#    - Copy the token from response and paste it in @adminToken variable
+#    - Get admin dashboard
+#    - Add courses to the college
+#    - View all courses
+#    - Delete courses if needed
+#
+# 4. STUDENT FLOW:
+#    - Register a new student (use a valid collegeId and deptId)
+#    - Login as student
+#    - Copy the token from response and paste it in @studentToken variable
+#    - Get student dashboard
+#    - View student profile
+#    - Update student profile
+#    - View available courses
+#    - Enroll in courses
+#    - View enrollment history
+#
+# NOTE: 
+# - Replace the email/password in login requests with actual credentials from your database
+# - Replace IDs (collegeId, deptId, courseId, requestId) with actual IDs from your database
+# - After each login, copy the JWT token from the response and update the respective variable
+# - Make sure your Spring Boot application is running on http://localhost:80
+#
+################################################################################
